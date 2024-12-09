@@ -1,12 +1,14 @@
 import gymnasium as gym
 
-from controllers.random import RandomController
+from controllers.pd import PDController
+
 
 n_steps = 200
 env = gym.make("Pendulum-v1", render_mode="human", g=9.81)
-controller = RandomController(env)
+controller = PDController(env, kp=10.0, kd=1.0)
 
-env.reset()
+# USTAWIENIE STANU POCZĄTKOWEGO
+env.reset(options={"state": [3.14, 0.0]})
 
 episode_reward = 0.
 for i in range(n_steps):
