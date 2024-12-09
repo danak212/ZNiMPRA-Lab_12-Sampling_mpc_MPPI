@@ -1,12 +1,14 @@
 import gymnasium as gym
-from controllers.pd import PDController
+from controllers.pd import EnergySwingUpController
 
-n_steps = 200
+n_steps = 500  # Wydłużmy czas, aby dać szansę na "swing-up"
 env = gym.make("Pendulum-v1", render_mode="human", g=9.81)
-controller = PDController(env, kp=66.0, kd=12.0)  # Dostosuj wartości Kp i Kd
+
+# Używamy kontrolera Swing-up (energetycznego) zamiast prostego PD
+controller = EnergySwingUpController(env, kp=66.0, kd=8.0, energy_target=1.2)  # Dostosuj poziom energii
 
 # USTAWIENIE STANU POCZĄTKOWEGO
-observation, info = env.reset(options={"state": [3.1, 0.0]})  # Losowy start
+observation, info = env.reset(options={"state": [3.1, 0.0]})  # Start z bliskiej pozycji "w dół"
 
 episode_reward = 0.0
 for i in range(n_steps):
